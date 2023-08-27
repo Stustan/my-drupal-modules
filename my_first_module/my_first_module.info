@@ -1,0 +1,4 @@
+name = my_first_module
+description = Это мой первый модуль
+version = 7.x-dev
+core = 7.x

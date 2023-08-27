@@ -1,0 +1,11 @@
+<?php
+
+function test_fields_field_schema($field) {
+    return array(
+        'columns'   => array(
+            'textf' => array(
+             'type' => 'int',
+            ),
+        ),
+    );
+}

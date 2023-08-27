@@ -1,0 +1,19 @@
+<?php
+function my_first_module_menu(){
+    $items = array(); // инициализируем массив наших пунктов меню
+     
+    $items['my_page'] = array(  //добавляем страницу по пути 'page_example'
+      'title' => 'Пример страницы', //заголовок страницы
+      'page callback' => 'my_first_page', //функция возвращающая контент страницы
+      'access callback' => TRUE, // разрешаем всем просматривать эту страницу
+  );    
+     
+     
+    return $items; //возвращаем список страниц
+}
+ 
+ 
+function my_first_page() {
+
+    return 'Мой первый модуль'; //возвращаем контент
+}

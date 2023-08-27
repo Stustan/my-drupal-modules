@@ -1,0 +1,97 @@
+<?php
+function my_second_module_advanced_menu(){
+    $items = array(); // инициализируем массив наших пунктов меню
+        
+    $items['advanced_form'] = array(
+        'title' => 'Заголовок страницы',
+        'page callback' => 'form_function',
+        'type' => MENU_NORMAL_ITEM,
+        'access callback' => TRUE,
+    );
+    return $items;
+}
+
+function form_function(){
+    //return t('некая форма');
+    $form = drupal_get_form('my_advanced_form');
+    $form = drupal_render($form);
+    return $form.'Содержимое тестовой страницы';
+    
+}
+
+function my_advanced_form($form, $form_state){
+    $form = array();
+    $form['name'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Ваше имя'),
+        '#required' => true,
+    );
+    $form['sex'] = array(
+        '#type' => 'radios',
+        '#title' => 'Ваш пол',
+        '#options' => array(
+            0 => t('М'),
+            1 => t('Ж')),
+        '#required' => true,
+    );
+    $form['maiden_name'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Ваша девичья фамилия'),
+        '#states' => array(
+            'visible' => array(
+                'input[name = "sex"]' => array('value' => 1),
+            ),
+        ),
+    );
+    $form['served'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Служил в армии'),
+        '#states' => array(
+            'visible' => array(
+                'input[name = "sex"]' => array('value' => 0),
+            ),
+        ),
+    );
+    $form['rank'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Ваше воинское звание'),
+        '#default_value' => t('Рядовой'),
+        '#states' => array(
+            'visible' => array(
+                'input[name = "sex"]' => array('value' => 0),
+                'input[name = "served"]' => array('checked' => true)
+            ),
+        ),
+    );
+    $form['submit'] = array(
+        '#type' => 'submit',
+        '#value' => t('Submit'),
+    );
+    return $form;
+}
+
+function my_advanced_form_validate($form, &$form_state){
+    if($form_state['values']['maiden_name'] == ''){
+        $form_state['values']['maiden_name'] = 'Отсутствует';
+    }
+    if (mb_strlen($form_state['values']['name']) < 3){
+        form_set_error('name', t('Слишком короткое имя.'));
+    }
+}
+
+function my_advanced_form_submit($form, $form_state){
+    $name = $form_state['values']['name'];
+    $sex = $form_state['values']['sex'];
+    $maiden_name = $form_state['values']['maiden_name'];
+    $rank = $form_state['values']['rank'];
+
+    $str = $name . "\n" . $sex . "\n" . $maiden_name . "\n" . $rank;
+
+    $file_name = 'public://' . md5(time()) . '.txt';
+    $file = fopen ($file_name, "w+");
+    fputs ($file, $str);
+    fclose ($file);
+
+    drupal_set_message('Данные записаны в файл');
+}
+

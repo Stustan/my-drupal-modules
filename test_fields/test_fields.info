@@ -1,0 +1,8 @@
+name = Модуль для работы с полями
+description = В этом модуле используется Field API
+package = test_modules
+version = 7.x-dev
+core = 7.x
+datestamp = "1332419400"
+project = "test_fields"
+dependencies[] = my_second_module_advanced

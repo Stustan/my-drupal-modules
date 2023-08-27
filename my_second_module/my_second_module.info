@@ -1,0 +1,4 @@
+name = my_second_module
+description = Это мой второй модуль
+version = 7.x-dev
+core = 7.x

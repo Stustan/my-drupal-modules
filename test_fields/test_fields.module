@@ -1,0 +1,88 @@
+<?php
+
+function test_fields_field_info(){
+    return array(
+        'textf' => array(
+            'label' => t('Выбор пола'),
+            'description' => t('Описание поля'),
+            'default_widget' => 'textf_widget',
+            'default_formatter' => 'textf_formatter',
+        ),
+    );
+}
+
+function test_fields_field_widget_info(){
+    return array(
+        'textf' => array(
+            'label' => t('Переключатель'),
+            'field types' => array('textf'),
+        ),
+    );
+}
+
+function test_fields_field_formatter_info(){
+    return array(
+        'textf_formatter' => array(
+            'label' => t('Кратко'),
+            'field types' => array('textf'),
+        ),
+        'textf_formatter_2' => array(
+            'label' => t('Полно'),
+            'field types' => array('textf'),
+        ),
+    );
+}
+
+function test_fields_field_widget_form($form, $form_state, $field, $instance, $langcode, $items, $delta, $element){
+    switch ($instance['widget']['type']){
+        case 'textf':
+            $element['textf'] = array(
+                '#type' => 'radios',
+                '#options' => array(1 => t('M'), 2 => t('Ж')),
+                '#title' => $element['#description'],
+                '#default_value' => isset($items[0]['textf']) ? $items[0]['textf'] : 1,
+                '#required' => $element['#required'],
+                '#weight' => isset($element['#weight']) ? $element['#weight'] : 0,
+                '#delta' => $delta,
+            );
+        break;
+    }
+    return $element;
+}
+
+function test_fields_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display){
+    $element = array();
+    switch ($display['type']){
+        case 'textf_formatter':
+            foreach ($items as $delta => $item) {
+                if ($item['textf']){
+                    $val = $item['textf'];
+                    if ($val==1){
+                        $element[$delta]['#markup'] = 'М';
+                    }elseif($val==2){
+                        $element[$delta]['#markup'] = 'Ж';
+                    }
+                }
+            }
+            break;
+        case 'textf_formatter_2':
+            foreach ($items as $delta => $item) {
+                if ($item['textf']){
+                    $val = $item['textf'];
+                    if ($val==1){
+                        $element[$delta]['#markup'] = 'Мужчина';
+                    }elseif($val==2){
+                        $element[$delta]['#markup'] = 'Женщина';
+                    }
+                }
+            }
+            break;  
+    }
+    return $element;
+}
+
+function test_fields_field_is_empty($item, $field){
+    if(empty($item['textf'])){
+        return true;
+    }
+}

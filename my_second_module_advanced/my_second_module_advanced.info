@@ -1,0 +1,5 @@
+name = my_second_module_advanced
+description = Это мой второй модуль(расширенный)
+version = 7.x-dev
+core = 7.x
+package = test_modules
